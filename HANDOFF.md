@@ -1,5 +1,5 @@
 # Junior Jarvis Career — Handoff Document
-**Last Updated:** 2026-02-22
+**Last Updated:** 2026-02-22 (Governance: CLAUDE.md converted to project-specific v3.0 format)
 **Status:** Live on GitHub Pages, ready for expo booth
 
 ---
@@ -212,6 +212,16 @@ They share the same visual design, branding, and architecture but are entirely s
 
 ---
 
+## Session Log
+
+### 2026-02-22 — Claude Governance
+- **CLAUDE.md converted to project-specific v3.0 format** — Removed embedded global copilot prompt; project-specific rules only
+- **Global Claude standards centralized** — `~/.claude/CLAUDE.md` (v3.0 master) applies to all NexusBlue projects automatically
+- **Master template stored** at `NexusBlueDev/nexusblue-application-templates/claude/CLAUDE.md` (source of truth)
+- **HANDOFF.md is now the governing document** — Claude reads this first each session to understand project state
+
+---
+
 ## Claude Code Notes
 
 - Global namespace: `JJ` (window.JJ)
@@ -219,3 +229,4 @@ They share the same visual design, branding, and architecture but are entirely s
 - All DOM manipulation goes through `JJ.ui` — never direct DOM access in `app.js`
 - Always commit and push to GitHub before considering any task complete
 - When bumping versions: update `?v=N` in all script/link tags in `index.html` AND bump `CACHE_NAME` in `sw.js`
+- **Global rules**: auto-loaded from `~/.claude/CLAUDE.md`; CLAUDE.md in this repo contains project-specific overrides only
