@@ -285,6 +285,22 @@ body {
 .guess-intro { font-size: 1.2em; color: rgba(255,255,255,0.7); }
 .guess-ask { font-size: 1.1em; color: rgba(70,179,230,0.8); }
 
+/* ========== Career Match Screen ========== */
+.match-intro {
+  font-size: 1.05em;
+  color: rgba(255,255,255,0.75);
+  max-width: 440px;
+  line-height: 1.4;
+  padding: 0 8px;
+}
+
+.match-confirm {
+  font-size: 1.05em;
+  color: rgba(70,179,230,0.9);
+  font-weight: 600;
+  max-width: 420px;
+}
+
 /* ========== AI Future Screen ========== */
 .future-intro {
   font-size: 1.4em;
@@ -293,20 +309,21 @@ body {
   text-shadow: 0 0 20px rgba(250,112,34,0.4);
   animation: sparkle 2s ease-in-out infinite;
   margin-top: 4px;
+  max-width: 480px;
 }
 
-#screen-future .character-card {
-  width: 280px;
-  padding: 20px 18px;
+.future-career-card {
+  width: 220px;
+  padding: 16px 14px;
 }
 
-#screen-future .character-emoji {
-  font-size: 3.5em;
+.future-career-card .character-emoji {
+  font-size: 3em;
   margin-bottom: 4px;
 }
 
-#screen-future .character-name {
-  font-size: 1.5em;
+.future-career-card .character-name {
+  font-size: 1.3em;
   margin-bottom: 0;
 }
 
@@ -332,7 +349,7 @@ body {
   font-size: 1em;
   font-weight: 700;
   letter-spacing: 0.5px;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .ai-impact-card .ai-section-title { color: #46b3e6; }
@@ -342,6 +359,44 @@ body {
   font-size: 1em;
   line-height: 1.5;
   color: rgba(255,255,255,0.88);
+}
+
+/* ========== Success Steps List ========== */
+.ai-steps-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  counter-reset: step-counter;
+}
+
+.ai-step-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 0.95em;
+  line-height: 1.45;
+  color: rgba(255,255,255,0.88);
+  counter-increment: step-counter;
+}
+
+.ai-step-item::before {
+  content: counter(step-counter);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #fa7022, #FFB300);
+  color: #fff;
+  font-size: 0.8em;
+  font-weight: 800;
+  flex-shrink: 0;
+  margin-top: 1px;
+  box-shadow: 0 2px 8px rgba(250,112,34,0.4);
 }
 
 /* ========== Emoji Reactions ========== */
@@ -454,6 +509,7 @@ body {
   .gallery-item { padding: 6px 4px; }
   .nb-logo { width: 180px; padding: 8px 18px; }
   .ai-section-text { font-size: 0.9em; }
+  .ai-step-item { font-size: 0.88em; }
 }
 
 /* ========== Responsive — Tablet & Desktop ========== */
@@ -477,7 +533,10 @@ body {
   .step-text { font-size: 1em; }
   .ai-section-card { max-width: 580px; padding: 18px 24px; }
   .ai-section-text { font-size: 1.05em; }
-  #screen-future .character-card { width: 320px; }
+  .ai-step-item { font-size: 1em; }
+  .future-career-card { width: 260px; }
+  .future-career-card .character-emoji { font-size: 3.5em; }
+  .future-career-card .character-name { font-size: 1.5em; }
 }
 
 /* ========== Responsive — Large screens ========== */

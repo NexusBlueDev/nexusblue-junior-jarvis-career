@@ -1,7 +1,8 @@
 /**
  * Junior Jarvis Career — Main Application Controller
- * Orchestrates game flow. Correct guess → AI Future screen with career insights.
- * Wrong guess → Result screen. Button-only input.
+ * Career path discovery flow:
+ *   Welcome → Questions → Career Match → AI Future → Explore Again
+ * No yes/no confirmation — the match is presented as the recommendation.
  */
 var JJ = window.JJ || {};
 
@@ -46,10 +47,8 @@ JJ.app = {
     document.getElementById('btn-probably').addEventListener('click', function () { self.answer(0.75); });
     document.getElementById('btn-probably-not').addEventListener('click', function () { self.answer(0.25); });
     document.getElementById('btn-uncertain').addEventListener('click', function () { self.answer(null); });
-    document.getElementById('btn-correct').addEventListener('click', function () { self.feedback(true); });
-    document.getElementById('btn-incorrect').addEventListener('click', function () { self.feedback(false); });
+    document.getElementById('btn-see-future').addEventListener('click', function () { self.showFuture(); });
     document.getElementById('btn-future-play-again').addEventListener('click', function () { self.restart(); });
-    document.getElementById('btn-restart').addEventListener('click', function () { self.restart(); });
 
     var restartLinks = document.querySelectorAll('.btn-restart-link');
     for (var i = 0; i < restartLinks.length; i++) {
@@ -81,9 +80,9 @@ JJ.app = {
     if (this.state !== 'playing') return;
     this._answerLock = false;
 
-    if (JJ.engine.shouldGuess()) { this.makeGuess(); return; }
+    if (JJ.engine.shouldGuess()) { this.revealMatch(); return; }
     var qIdx = JJ.engine.selectQuestion();
-    if (qIdx < 0) { this.makeGuess(); return; }
+    if (qIdx < 0) { this.revealMatch(); return; }
 
     var question = JJ.questions[qIdx];
     JJ.ui.setQuestion(question.text);
@@ -116,44 +115,36 @@ JJ.app = {
     setTimeout(function () { self.askQuestion(); }, 600);
   },
 
-  makeGuess: function () {
-    this.state = 'guessing';
+  revealMatch: function () {
+    this.state = 'match';
     this._answerLock = false;
     JJ.speech.cancelSpeech();
+
     var career = JJ.engine.getGuess();
     this._currentCareer = career;
 
+    JJ.metrics.recordGameEnd(true);
     JJ.effects.soundReveal();
-    JJ.ui.showScreen('guess');
-    JJ.ui.showGuess(career);
+    JJ.effects.confetti();
+    JJ.ui.showScreen('match');
+    JJ.ui.showMatch(career);
+    JJ.ui.setOrbState('celebrating');
 
-    JJ.ui.setOrbState('speaking');
-    var text = JJ.messages.guessPrefix + career.name + '. ' + career.fact;
-    JJ.speech.speak(text, function () { JJ.ui.setOrbState('idle'); });
+    var speech = JJ.messages.matchPrefix + career.name + '! ' + JJ.messages.matchConfirm;
+    JJ.speech.speak(speech, function () { JJ.ui.setOrbState('idle'); });
   },
 
-  feedback: function (correct) {
-    JJ.metrics.recordGameEnd(correct);
+  showFuture: function () {
+    this.state = 'future';
+    JJ.speech.cancelSpeech();
     JJ.effects.soundTap();
+    JJ.ui.showScreen('future');
+    JJ.ui.showFuture(this._currentCareer);
+    JJ.ui.setOrbState('speaking');
 
-    if (correct) {
-      this.state = 'future';
-      JJ.effects.confetti();
-      JJ.effects.soundCorrect();
-      JJ.ui.showScreen('future');
-      JJ.ui.showFuture(this._currentCareer);
-      JJ.ui.setOrbState('celebrating');
-
-      var careerName = this._currentCareer ? this._currentCareer.name : 'that career';
-      var speech = JJ.messages.correct + ' ' + careerName + ' is a fantastic choice! ' + JJ.messages.futureIntro;
-      JJ.speech.speak(speech, function () { JJ.ui.setOrbState('idle'); });
-    } else {
-      this.state = 'result';
-      JJ.ui.showScreen('result');
-      JJ.ui.showResult(false);
-      JJ.ui.setOrbState('idle');
-      JJ.speech.speak(JJ.messages.incorrect);
-    }
+    var careerName = this._currentCareer ? this._currentCareer.name : 'this career';
+    var speech = 'Here\'s how AI will change the future for ' + careerName + '! ' + JJ.messages.futureIntro;
+    JJ.speech.speak(speech, function () { JJ.ui.setOrbState('idle'); });
   },
 
   restart: function () {

@@ -13,9 +13,8 @@ JJ.ui = {
     this.screens = {
       welcome: document.getElementById('screen-welcome'),
       game:    document.getElementById('screen-game'),
-      guess:   document.getElementById('screen-guess'),
-      future:  document.getElementById('screen-future'),
-      result:  document.getElementById('screen-result')
+      match:   document.getElementById('screen-match'),
+      future:  document.getElementById('screen-future')
     };
     this.answerBtns = [
       document.getElementById('btn-yes'),
@@ -51,7 +50,7 @@ JJ.ui = {
   },
 
   /**
-   * Show a modal overlay with career details including AI impact.
+   * Show a modal overlay with career details.
    */
   showCareerPreview: function (career) {
     var existing = document.getElementById('character-preview-overlay');
@@ -98,7 +97,7 @@ JJ.ui = {
   },
 
   /**
-   * Build Instagram-style progress dots.
+   * Build progress dots (one per question).
    */
   buildProgressDots: function () {
     var container = document.getElementById('progress-dots');
@@ -118,16 +117,9 @@ JJ.ui = {
         if (key === name) screens[key].classList.add('fade-in');
       }
     });
-    if (name !== 'result' && this.screens.result) {
-      this.screens.result.classList.remove('celebration');
-    }
-    // Scroll future screen to top when shown
-    if (name === 'future' && this.screens.future) {
-      this.screens.future.scrollTop = 0;
-    }
-    // Scroll welcome screen to top when returning
-    if (name === 'welcome' && this.screens.welcome) {
-      this.screens.welcome.scrollTop = 0;
+    // Scroll to top when entering scrollable screens
+    if ((name === 'future' || name === 'welcome') && screens[name]) {
+      screens[name].scrollTop = 0;
     }
   },
 
@@ -158,11 +150,14 @@ JJ.ui = {
     this.answerBtns.forEach(function (btn) { if (btn) btn.disabled = !enabled; });
   },
 
-  showGuess: function (career) {
-    var emoji = document.getElementById('guess-emoji');
-    var name  = document.getElementById('guess-name');
-    var fact  = document.getElementById('guess-fact');
-    var card  = document.getElementById('guess-card');
+  /**
+   * Show the career match screen with the recommended career.
+   */
+  showMatch: function (career) {
+    var emoji = document.getElementById('match-emoji');
+    var name  = document.getElementById('match-name');
+    var fact  = document.getElementById('match-fact');
+    var card  = document.getElementById('match-card');
     if (emoji) emoji.textContent = career.emoji;
     if (name)  name.textContent  = career.name;
     if (fact)  fact.textContent  = career.fact;
@@ -170,39 +165,33 @@ JJ.ui = {
   },
 
   /**
-   * Show the AI Future screen with career impact and success tips.
+   * Show the AI Future screen.
+   * Renders aiSuccessSteps as a numbered <ol> list.
    */
   showFuture: function (career) {
-    var emoji   = document.getElementById('future-emoji');
-    var name    = document.getElementById('future-name');
-    var impact  = document.getElementById('future-ai-impact');
-    var success = document.getElementById('future-ai-success');
-    var card    = document.getElementById('future-card');
-    if (emoji)   emoji.textContent   = career.emoji;
-    if (name)    name.textContent    = career.name;
-    if (impact)  impact.textContent  = career.aiImpact;
-    if (success) success.textContent = career.aiSuccess;
-    if (card)    card.style.background = 'linear-gradient(135deg, ' + career.gradient[0] + ', ' + career.gradient[1] + ')';
-  },
+    var titleName = document.getElementById('future-title-name');
+    var emoji     = document.getElementById('future-emoji');
+    var name      = document.getElementById('future-name');
+    var impact    = document.getElementById('future-ai-impact');
+    var stepsList = document.getElementById('future-ai-steps');
+    var card      = document.getElementById('future-card');
 
-  showResult: function (correct) {
-    var icon   = document.getElementById('result-icon');
-    var msg    = document.getElementById('result-message');
-    var detail = document.getElementById('result-detail');
-    var screen = this.screens.result;
-    if (correct) {
-      if (icon)   icon.textContent   = '🎊';
-      if (msg)    msg.textContent    = JJ.messages.correct;
-      if (detail) detail.textContent = '';
-      if (screen) screen.classList.add('celebration');
-      JJ.effects.confetti();
-      JJ.effects.soundCorrect();
-    } else {
-      if (icon)   icon.textContent   = '🔄';
-      if (msg)    msg.textContent    = JJ.messages.incorrect;
-      if (detail) detail.textContent = JJ.messages.encourageRetry;
-      if (screen) screen.classList.remove('celebration');
-      JJ.effects.soundWrong();
+    if (titleName) titleName.textContent = career.name;
+    if (emoji)     emoji.textContent     = career.emoji;
+    if (name)      name.textContent      = career.name;
+    if (impact)    impact.textContent    = career.aiImpact;
+    if (card)      card.style.background = 'linear-gradient(135deg, ' + career.gradient[0] + ', ' + career.gradient[1] + ')';
+
+    // Build numbered steps list
+    if (stepsList) {
+      stepsList.innerHTML = '';
+      var steps = career.aiSuccessSteps || [];
+      steps.forEach(function (step) {
+        var li = document.createElement('li');
+        li.className = 'ai-step-item';
+        li.textContent = step;
+        stepsList.appendChild(li);
+      });
     }
   },
 

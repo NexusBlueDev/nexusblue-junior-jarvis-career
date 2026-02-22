@@ -80,22 +80,23 @@ JJ.engine = {
   },
 
   /**
-   * Determine if we have enough confidence to make a guess.
+   * Determine if we have enough signal to reveal a career match.
+   * Requires more questions for a fuller exploration before committing.
    */
   shouldGuess: function () {
     if (this.asked.size >= JJ.questions.length) return true;
 
-    // Let the conversation breathe — at least 5 questions before any guess
-    if (this.asked.size < 5) return false;
+    // Always ask at least 7 questions for a thorough exploration
+    if (this.asked.size < 7) return false;
 
     var sorted = this.getSortedCharacters();
     var topScore = sorted[0].score;
     var secondScore = sorted.length > 1 ? sorted[1].score : -Infinity;
     var lead = topScore - secondScore;
 
-    // Guess when: clear leader after 5+ questions
-    if (lead >= 4) return true;
-    if (this.asked.size >= 6 && lead >= 3) return true;
+    // Reveal when: very clear leader after 7+ questions
+    if (lead >= 5) return true;
+    if (this.asked.size >= 9 && lead >= 4) return true;
 
     return false;
   },
