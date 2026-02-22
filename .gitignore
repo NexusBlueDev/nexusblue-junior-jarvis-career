@@ -1,0 +1,9 @@
+_backup/
+.env
+.DS_Store
+node_modules/
+*.log
+Thumbs.db
+desktop.ini
+CLAUDE_CODE_PROMPT.md
+.claude/
