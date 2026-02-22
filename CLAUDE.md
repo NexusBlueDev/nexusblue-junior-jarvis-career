@@ -1,31 +1,35 @@
 # Junior Jarvis Career — Project-Specific Claude Code Instructions
 
+**Global template version:** v3.0
+**Based on:** `application-templates/claude/CLAUDE.md`
+
+---
+
+## Project Identity
+
+```
+What:    Kid-friendly AI career discovery tool for NexusBlue expo booths.
+         NOT a guessing game — a career path discovery experience.
+         Kids answer interest/personality questions → career match →
+         see their AI future + concrete numbered success steps.
+Mode:    HTML5 PWA (pure client-side — no build tools, no bundler)
+Repo:    https://github.com/NexusBlueDev/nexusblue-junior-jarvis-career
+Live:    https://nexusbluedev.github.io/nexusblue-junior-jarvis-career/
+Stack:   HTML5 + CSS3 + Vanilla JS (ES5), Web Speech API (TTS only), Service Worker
+```
+
+---
+
 ## Workflow Rules
-- **Always commit and push to GitHub before any task is considered complete.**
-- Do not ask for approval before committing — authorized per established workflow.
-- When bumping versions: update `?v=N` on ALL script/link tags in `index.html` AND bump `CACHE_NAME` in `sw.js`.
 
-## Project
-Kid-friendly AI career discovery tool for NexusBlue expo booths.
-NOT a guessing game — a career path discovery experience.
-Kids answer interest/personality questions → get a career match → see their AI future + success steps.
-Pure client-side HTML5/CSS/JS with PWA support. No build tools, no bundler.
+- **Always commit and push before any task is complete.** No exceptions.
+- When bumping versions: update `?v=N` on ALL `<script>`/`<link>` tags in `index.html` AND bump `CACHE_NAME` in `sw.js` together.
 
-## Live URLs
-- App: https://nexusbluedev.github.io/nexusblue-junior-jarvis-career/
-- Repo: https://github.com/NexusBlueDev/nexusblue-junior-jarvis-career
-
-## AI-First Design Principle
-Static decision tree engine is the offline fallback.
-`JJ.aiConfig` in `data.js` is the hook point for Claude API integration.
-
-## Stack
-- HTML5 + CSS3 + Vanilla JavaScript (ES5, no transpiler)
-- Web Speech API (TTS only)
-- Service Worker for offline PWA (current cache: `junior-jarvis-career-v3`)
-- No external dependencies
+---
 
 ## Architecture
+
+**Key files:**
 - `js/data.js` — 8 careers with facts, aiImpact, aiSuccessSteps[], 12 questions, messages
 - `js/engine.js` — Scoring engine (min 7 questions, 5pt lead required before reveal)
 - `js/speech.js` — Web Speech API TTS wrapper
@@ -34,21 +38,35 @@ Static decision tree engine is the offline fallback.
 - `js/metrics.js` — LocalStorage analytics (key: `jj_career_metrics`)
 - `js/app.js` — Main controller: welcome → game → match → future → restart
 
-## Game Flow
-1. Welcome — browse career cards, click "Find My Career!"
-2. Questions — 7-12 interest/personality questions (not career-skill questions)
-3. Career Match — direct reveal, no yes/no confirmation
-4. AI Future — AI impact paragraph + 5 numbered success steps
-5. Restart — full engine + UI reset before returning to welcome
-
-## Key Conventions
-- Global namespace: `JJ` (window.JJ)
+**Conventions:**
+- Global namespace: `JJ` (window.JJ) — all modules attach to this
+- ES5 only — no arrow functions, no `let`/`const`, no template literals, no modules
 - No build step — scripts load via `<script>` tags in order in `index.html`
-- All DOM manipulation through `JJ.ui` — no direct DOM access in `app.js`
+- All DOM manipulation through `JJ.ui` — never direct DOM access in `app.js`
 - Speech through `JJ.speech`
-- Career data structure: `{ id, name, emoji, fact, gradient, aiImpact, aiSuccessSteps[], props{} }`
-- Property matrix: helps, creates, discovery, outdoor, art, tech, strategy, physical
-- All career pairs must have ≥2 property differences
 
-## Current Version: v3
-## Docs: See HANDOFF.md and PUBLISHING_PIPELINE.md
+**Game flow:** Welcome → "Find My Career!" → Questions → Career Match (direct reveal, NO confirmation) → AI Future (impact + steps) → "Explore Again!"
+
+**CRITICAL — No yes/no confirmation.** Match is presented as a confident recommendation.
+
+**Career data structure:**
+```javascript
+{ id, name, emoji, fact, gradient[], aiImpact, aiSuccessSteps[], props{} }
+```
+
+**Property matrix:** `helps`, `creates`, `discovery`, `outdoor`, `art`, `tech`, `strategy`, `physical`
+
+**Restart critical fix:** `restart()` MUST call `JJ.engine.reset()`, clear question text/hint, and
+re-enable answer buttons — without this the first question breaks on restart without hard refresh.
+
+---
+
+## Stack Specifics
+
+```
+Language:       HTML5 + CSS3 + Vanilla JS (ES5)
+Hosting:        GitHub Pages (auto-deploy on push to main)
+Service Worker: junior-jarvis-career-vN (bump together with script tags)
+Storage key:    jj_career_metrics
+Current version: v3
+```
