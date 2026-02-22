@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Junior Jarvis Career — AI Career Guesser</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#46b3e6">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="description" content="AI career guessing game for kids — by NexusBlue!">
+  <link rel="stylesheet" href="css/styles.css?v=1">
+</head>
+<body>
+
+  <!-- ========== Welcome Screen ========== -->
+  <div id="screen-welcome" class="screen">
+    <img src="logo/NexusBlueLogo2white_backandblue_trans.png" alt="NexusBlue" class="nb-logo">
+    <h1 class="title gradient-text">Junior Jarvis Career</h1>
+    <p class="tagline">What Career is in Your Future?</p>
+    <div class="orb-wrapper" id="orb-welcome">
+      <div class="orb-glow"></div>
+      <div class="orb-ring"></div>
+      <div class="orb-ring orb-ring-2"></div>
+      <div class="orb-core"></div>
+      <div class="orb-pulse-ring"></div>
+      <div class="orb-pulse-ring orb-pulse-ring-2"></div>
+    </div>
+
+    <div class="glass-card how-to-play">
+      <h2 class="how-to-play-title">How to Play</h2>
+      <div class="steps">
+        <div class="step"><span class="step-icon">👇</span><span class="step-text">Click a card to learn about any career</span></div>
+        <div class="step"><span class="step-icon">🧠</span><span class="step-text">Pick the career YOU want to be — keep it in your head!</span></div>
+        <div class="step"><span class="step-icon">🎮</span><span class="step-text">Click Let's Play — I'll try to guess it!</span></div>
+      </div>
+    </div>
+
+    <div id="career-gallery" class="character-gallery"></div>
+
+    <button id="btn-start" class="btn btn-start btn-glow">Let's Play!</button>
+  </div>
+
+  <!-- ========== Question Screen ========== -->
+  <div id="screen-game" class="screen hidden">
+    <div class="game-header">
+      <div class="orb-wrapper orb-wrapper-small" id="orb-game">
+        <div class="orb-glow"></div>
+        <div class="orb-ring"></div>
+        <div class="orb-ring orb-ring-2"></div>
+        <div class="orb-core"></div>
+        <div class="orb-pulse-ring"></div>
+        <div class="orb-pulse-ring orb-pulse-ring-2"></div>
+      </div>
+      <div class="game-header-info">
+        <span id="question-counter" class="question-counter"></span>
+        <div id="progress-dots" class="progress-dots"></div>
+      </div>
+    </div>
+
+    <div class="glass-card question-card">
+      <p id="question-text" class="question"></p>
+      <p id="question-hint" class="question-hint"></p>
+    </div>
+
+    <div class="answer-buttons">
+      <button id="btn-yes" class="btn btn-yes">Yes!</button>
+      <button id="btn-no" class="btn btn-no">No!</button>
+      <button id="btn-probably" class="btn btn-probably">Maybe</button>
+      <button id="btn-probably-not" class="btn btn-probnot">Not Really</button>
+      <button id="btn-uncertain" class="btn btn-uncertain">Not Sure</button>
+    </div>
+
+    <p class="input-hint">Tap your answer!</p>
+    <button class="btn-restart-small btn-restart-link">Start Over</button>
+  </div>
+
+  <!-- ========== Guess Screen ========== -->
+  <div id="screen-guess" class="screen hidden">
+    <p class="guess-intro">I think I know your career!</p>
+    <div id="guess-card" class="character-card glass-card">
+      <div id="guess-emoji" class="character-emoji"></div>
+      <h2 id="guess-name" class="character-name"></h2>
+      <p id="guess-fact" class="character-fact"></p>
+    </div>
+    <p class="guess-ask">Did I get it right?</p>
+    <div class="guess-buttons">
+      <button id="btn-correct" class="btn btn-yes btn-glow">Yes! 🎉</button>
+      <button id="btn-incorrect" class="btn btn-no">Nope!</button>
+    </div>
+    <button class="btn-restart-small btn-restart-link">Start Over</button>
+  </div>
+
+  <!-- ========== AI Future Screen (shown on correct guess) ========== -->
+  <div id="screen-future" class="screen hidden">
+    <p class="future-intro">Amazing choice! Here's your future!</p>
+    <div id="future-card" class="character-card glass-card">
+      <div id="future-emoji" class="character-emoji"></div>
+      <h2 id="future-name" class="character-name"></h2>
+    </div>
+
+    <div class="glass-card ai-section-card ai-impact-card">
+      <h3 class="ai-section-title">🤖 AI, Robots &amp; Automation</h3>
+      <p id="future-ai-impact" class="ai-section-text"></p>
+    </div>
+
+    <div class="glass-card ai-section-card ai-success-card">
+      <h3 class="ai-section-title">⭐ How YOU Can Succeed!</h3>
+      <p id="future-ai-success" class="ai-section-text"></p>
+    </div>
+
+    <button id="btn-future-play-again" class="btn btn-start btn-glow">Play Again!</button>
+    <img src="logo/NexusBlueLogo2white_backandblue_trans.png" alt="NexusBlue" class="nb-logo-footer">
+  </div>
+
+  <!-- ========== Result Screen (wrong guess) ========== -->
+  <div id="screen-result" class="screen hidden">
+    <div id="result-icon" class="result-icon"></div>
+    <h2 id="result-message" class="result-message"></h2>
+    <p id="result-detail" class="result-detail"></p>
+    <button id="btn-restart" class="btn btn-start btn-glow">Play Again!</button>
+    <img src="logo/NexusBlueLogo2white_backandblue_trans.png" alt="NexusBlue" class="nb-logo-footer">
+  </div>
+
+  <!-- Tap-to-start overlay (unlocks speech synthesis) -->
+  <div id="tap-overlay" class="tap-overlay">
+    <p class="tap-text">Tap anywhere to start!</p>
+  </div>
+
+  <!-- Dark Overlay -->
+  <div class="bg-overlay" aria-hidden="true"></div>
+
+  <!-- Metrics -->
+  <div class="metrics">Games: <span id="play-count">0</span></div>
+
+  <!-- Scripts -->
+  <script src="js/data.js?v=1"></script>
+  <script src="js/engine.js?v=1"></script>
+  <script src="js/speech.js?v=1"></script>
+  <script src="js/effects.js?v=1"></script>
+  <script src="js/ui.js?v=1"></script>
+  <script src="js/metrics.js?v=1"></script>
+  <script src="js/app.js?v=1"></script>
+</body>
+</html>
