@@ -1,61 +1,54 @@
 # Junior Jarvis Career — Project-Specific Claude Code Instructions
 
+## Workflow Rules
+- **Always commit and push to GitHub before any task is considered complete.**
+- Do not ask for approval before committing — authorized per established workflow.
+- When bumping versions: update `?v=N` on ALL script/link tags in `index.html` AND bump `CACHE_NAME` in `sw.js`.
+
 ## Project
-Kid-friendly, voice-driven Akinator-style AI guessing game for expo booth.
-Guesses the career the player is thinking of, then explains how AI/automation/robots
-will impact that career and how they can succeed. Pure client-side HTML5/CSS/JS with PWA support.
-No build tools, no bundler.
+Kid-friendly AI career discovery tool for NexusBlue expo booths.
+NOT a guessing game — a career path discovery experience.
+Kids answer interest/personality questions → get a career match → see their AI future + success steps.
+Pure client-side HTML5/CSS/JS with PWA support. No build tools, no bundler.
+
+## Live URLs
+- App: https://nexusbluedev.github.io/nexusblue-junior-jarvis-career/
+- Repo: https://github.com/NexusBlueDev/nexusblue-junior-jarvis-career
 
 ## AI-First Design Principle
-This project is designed AI-first. The static decision tree engine is the offline fallback.
-The architecture supports swapping in an LLM backend (Claude API) for dynamic conversation,
-adaptive questioning, and natural language understanding. The `JJ.aiConfig` object in `data.js`
-is the configuration point for AI provider integration.
+Static decision tree engine is the offline fallback.
+`JJ.aiConfig` in `data.js` is the hook point for Claude API integration.
 
 ## Stack
-- HTML5 + CSS3 + Vanilla JavaScript (ES5 compatible, no transpiler needed)
+- HTML5 + CSS3 + Vanilla JavaScript (ES5, no transpiler)
 - Web Speech API (TTS only)
-- Service Worker for offline PWA
-- No external dependencies — fully self-contained
+- Service Worker for offline PWA (current cache: `junior-jarvis-career-v3`)
+- No external dependencies
 
 ## Architecture
-- `js/data.js` — Career data, questions, messages, AI impact/success content, AI config
-- `js/engine.js` — Scoring-based elimination engine (static fallback)
-- `js/speech.js` — Web Speech API wrapper with graceful degradation
-- `js/ui.js` — DOM manipulation, screen management, AI future screen
-- `js/metrics.js` — LocalStorage engagement analytics
-- `js/effects.js` — Particles, confetti, emoji reactions, Web Audio API sounds
-- `js/app.js` — Main controller, game flow orchestration
+- `js/data.js` — 8 careers with facts, aiImpact, aiSuccessSteps[], 12 questions, messages
+- `js/engine.js` — Scoring engine (min 7 questions, 5pt lead required before reveal)
+- `js/speech.js` — Web Speech API TTS wrapper
+- `js/effects.js` — Particles, confetti, emoji reactions, Web Audio sounds
+- `js/ui.js` — DOM, screens, career gallery, match screen, AI future screen (numbered steps)
+- `js/metrics.js` — LocalStorage analytics (key: `jj_career_metrics`)
+- `js/app.js` — Main controller: welcome → game → match → future → restart
 
 ## Game Flow
-1. Welcome screen — browse careers, pick one, click Let's Play
-2. Question screen — answer yes/no/maybe questions
-3. Guess screen — Jarvis reveals its guess, player confirms
-4. AI Future screen (correct guess) — shows AI impact + success tips for that career
-5. Result screen (wrong guess only) — shows retry message
+1. Welcome — browse career cards, click "Find My Career!"
+2. Questions — 7-12 interest/personality questions (not career-skill questions)
+3. Career Match — direct reveal, no yes/no confirmation
+4. AI Future — AI impact paragraph + 5 numbered success steps
+5. Restart — full engine + UI reset before returning to welcome
 
-## Career Data Structure
-Each career in `JJ.characters` has:
-- `id`, `name`, `emoji`, `fact` — standard display fields
-- `gradient` — two-color array for card background
-- `aiImpact` — how AI/automation/robots will affect this career
-- `aiSuccess` — how the player can succeed in this career in the AI age
-- `props` — boolean property map used by the scoring engine
-
-## Conventions
+## Key Conventions
 - Global namespace: `JJ` (window.JJ)
-- No build step — scripts load via `<script>` tags in order
-- Files reference each other through the shared `JJ` namespace
-- All DOM manipulation through `JJ.ui` — no direct DOM access elsewhere
-- Speech through `JJ.speech` — handles unavailable APIs gracefully
+- No build step — scripts load via `<script>` tags in order in `index.html`
+- All DOM manipulation through `JJ.ui` — no direct DOM access in `app.js`
+- Speech through `JJ.speech`
+- Career data structure: `{ id, name, emoji, fact, gradient, aiImpact, aiSuccessSteps[], props{} }`
+- Property matrix: helps, creates, discovery, outdoor, art, tech, strategy, physical
+- All career pairs must have ≥2 property differences
 
-## Key Decisions
-- 8 careers: Doctor, Artist, Scientist, Coder, Leader, Engineer, Teacher, Explorer
-- 8 properties: helps, creates, discovery, outdoor, art, tech, strategy, physical
-- All career pairs have at least 2 property differences (engine requirement)
-- AI Future screen only shows on correct guess (not wrong guess path)
-- Same NexusBlue branding and visual design as original Junior Jarvis
-
-## Testing
-Open `index.html` in Chrome or Edge. Works from file:// protocol (no server needed for basic testing).
-For PWA/Service Worker testing, serve via local HTTP server (`python -m http.server` or equivalent).
+## Current Version: v3
+## Docs: See HANDOFF.md and PUBLISHING_PIPELINE.md
