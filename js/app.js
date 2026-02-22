@@ -151,10 +151,19 @@ JJ.app = {
     this.state = 'welcome';
     this._answerLock = false;
     this._currentCareer = null;
+
+    // Fully reset engine and UI before returning to welcome
+    JJ.engine.reset();
     JJ.speech.cancelSpeech();
     JJ.effects.soundTap();
-    JJ.ui.showScreen('welcome');
+
+    // Clear question screen state so it's fresh on next play
+    JJ.ui.setQuestion('');
+    JJ.ui.setQuestionHint('');
+    JJ.ui.setAnswerButtonsEnabled(true);
     JJ.ui.updateProgress(0, JJ.engine.getTotalQuestions());
+
+    JJ.ui.showScreen('welcome');
     JJ.ui.updateMetrics(JJ.metrics.getPlayCount());
     JJ.ui.setOrbState('idle');
 

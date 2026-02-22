@@ -4,7 +4,7 @@
  * falls back to cache when offline (expo booth scenario).
  */
 
-var CACHE_NAME = 'junior-jarvis-career-v1';
+var CACHE_NAME = 'junior-jarvis-career-v3';
 var ASSETS = [
   './',
   'index.html',
