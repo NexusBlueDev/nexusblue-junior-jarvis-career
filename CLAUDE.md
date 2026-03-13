@@ -1,9 +1,7 @@
 # Junior Jarvis Career — Project-Specific Claude Code Instructions
 
-**Global template version:** v3.0
-**Based on:** `application-templates/claude/CLAUDE.md`
-
----
+> Global rules loaded dynamically from Core DB via `~/.claude/CLAUDE.md` (v9.0 bootloader).
+> Project-specific rules below override global rules where they conflict.
 
 ## Project Type
 **Type:** Static PWA — GitHub Pages
@@ -22,14 +20,8 @@ Live:    https://nexusbluedev.github.io/nexusblue-junior-jarvis-career/
 Stack:   HTML5 + CSS3 + Vanilla JS (ES5), Web Speech API (TTS only), Service Worker
 ```
 
----
-
-## Workflow Rules
-
-- **Always commit and push before any task is complete.** No exceptions.
+## Project-Specific Rules
 - When bumping versions: update `?v=N` on ALL `<script>`/`<link>` tags in `index.html` AND bump `CACHE_NAME` in `sw.js` together.
-
----
 
 ## Architecture
 
