@@ -215,8 +215,13 @@ body {
 .gallery-click { font-size: 0.55em; color: rgba(255,255,255,0.5); font-style: italic; }
 
 /* ========== How to Play ========== */
-.how-to-play { padding: 6px 14px; max-width: 420px; width: 100%; }
+.how-to-play { padding: 6px 14px; max-width: 520px; width: 100%; }
+.how-to-play-content { display: flex; align-items: center; gap: 14px; }
+.how-to-play-left { flex: 1; min-width: 0; }
 .how-to-play-title { font-size: 0.9em; color: #46b3e6; margin-bottom: 4px; letter-spacing: 1px; font-weight: 700; }
+.how-to-play-qr { display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; flex-shrink: 0; }
+.how-to-play-qr img { width: 80px; height: 80px; }
+.qr-label { font-size: 0.6em; color: rgba(255,255,255,0.6); letter-spacing: 0.5px; }
 
 .steps { display: flex; flex-direction: column; gap: 3px; text-align: left; }
 .step { display: flex; align-items: center; gap: 8px; }
@@ -529,7 +534,8 @@ body {
   .gallery-name { font-size: 0.8em; }
   .nb-logo { width: 260px; }
   .nb-logo-footer { width: 160px; }
-  .how-to-play { max-width: 500px; padding: 10px 20px; }
+  .how-to-play { max-width: 600px; padding: 10px 20px; }
+  .how-to-play-qr img { width: 90px; height: 90px; }
   .step-text { font-size: 1em; }
   .ai-section-card { max-width: 580px; padding: 18px 24px; }
   .ai-section-text { font-size: 1.05em; }
