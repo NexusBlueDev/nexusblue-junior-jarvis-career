@@ -8,3 +8,12 @@ desktop.ini
 CLAUDE_CODE_PROMPT.md
 .claude/
 .preflight-verified
+.iag-audit.log
+.iag-audit.log.*
+.iag-session-impact.json
+.iag-process.json
+.iag-scope.json
+.iag-scope-required
+.iag-classification
+.claude/settings.local.json
+.continuity-verified
